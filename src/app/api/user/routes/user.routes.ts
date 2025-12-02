@@ -6,17 +6,17 @@ import { userValidation } from "../validator/user.validator";
 
 const router = Router();
 
-const baseRoute = "/users";
+const baseRoute = "/user/auth";
 
 router.post(
   "/register",
-  validator(userValidation),
+  validator(userValidation.register),
   controller(userController.register)
 );
 
 router.post(
   "/login",
-  validator(userValidation),
+  validator(userValidation.login),
   controller(userController.logIn)
 );
 

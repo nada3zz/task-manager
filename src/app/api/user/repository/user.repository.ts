@@ -1,14 +1,14 @@
-import { IUser } from "../interface/user.interface";
+import { RegisterDTO } from "../interface";
 import userModel from "../model/user.model";
 
 class UserRepository {
-  async create(data: IUser) {
+  async create(data: RegisterDTO) {
     const user = await userModel.create(data);
     return user;
   }
 
   async findUser(username: string) {
-    const user = await userModel.findOne({username});
+    const user = await userModel.findOne({ username });
     return user;
   }
 
@@ -16,7 +16,6 @@ class UserRepository {
     const user = await userModel.findById(id);
     return user;
   }
-
 }
 
 export default new UserRepository();
