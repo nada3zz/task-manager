@@ -5,25 +5,11 @@ import { errorHandler } from "./app/middlewares/errorHandler.middleware";
 import { notFound } from "./app/middlewares/notFound.middleware";
 import { checkConnection } from "./app/middlewares/checkconnection.middleware";
 import { connectDB } from "./utils/dbConnection";
-import mongoose from "mongoose";
-import { MONGO_URI } from "./config";
+
 
 export const app = express();
 
-console.log("MONGO_URI:", MONGO_URI);
-if (!MONGO_URI) {
-  console.error("FATAL ERROR: MONGO_URI is not defined.");
-}
-
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log("✅ Connected successfully to MongoDB container!");
-  })
-  .catch((error) => {
-    console.error("❌ MongoDB connection error:", error);
-    process.exit(1);
-  });
+connectDB();
 
 
 app.use(
