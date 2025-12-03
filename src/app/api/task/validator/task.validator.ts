@@ -1,28 +1,27 @@
 import Joi from "joi";
 import { escape } from "validator";
 
-const sanitizedString: any = Joi.string().custom((value, helpers) => {
-  const sanitizedValue = escape(value);
-  return sanitizedValue;
-});
+const sanitizedString = Joi.string().custom((value, helpers) => escape(value));
 
 const add: any = {
   title: sanitizedString.required(),
   description: sanitizedString.required(),
+  completed: Joi.boolean().optional(),
 };
 
 const edit: any = {
-  id: Joi.number().integer().required(),
+  id: Joi.string().required(),
   title: sanitizedString.optional(),
   description: sanitizedString.optional(),
+  completed:Joi.boolean().optional()
 };
 
 const getDetailsSchema: any = {
-  id: Joi.number().integer().required(),
+  id: Joi.string().required(),
 };
 
 const deleteSchema: any = {
-  id: Joi.number().integer().required(),
+  id: Joi.string().required(),
 };
 
 const taskValidation = {

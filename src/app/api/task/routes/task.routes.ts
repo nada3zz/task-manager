@@ -2,7 +2,7 @@ import { Router } from "express";
 import { validator } from "../../../middlewares/validator.middleware";
 import { controller } from "../../../middlewares/controller.middleware";
 import taskController from "../controller/task.controller";
-import { taskValidation } from "../schema/task.schema";
+import { taskValidation } from "../validator/task.validator";
 import { isAuthenticated } from "../../../middlewares/isAuthenticated.middleware";
 
 const router = Router();

@@ -1,4 +1,4 @@
-import { ITask, IUpdateTask, IFindAllTasks } from "../interface";
+import { ITask, IUpdateTask, IFindAllTasks, IAddTask } from "../interface";
 import taskModel from "../model/task.model";
 
 class TaskRepository {
@@ -24,9 +24,7 @@ class TaskRepository {
         .find(query)
         .sort({ createdAt: sortDirection })
         .skip(skip)
-        .limit(limit)
-        .populate("user", "username") 
-        .exec(),
+        .limit(limit),
       taskModel.countDocuments(query),
     ]);
 
@@ -41,21 +39,16 @@ class TaskRepository {
   }
 
   async findById(taskId: string): Promise<ITask | null> {
-    const task = await taskModel
-      .findById(taskId)
-      .populate("user", "username") 
-      .exec();
+    const task = await taskModel.findById(taskId);
     return task;
   }
 
-  async create(
-    data: {
-      title: string;
-      description?: string;
-      completed?: boolean;
-    },
-    userId: string
-  ): Promise<ITask> {
+  async findByUser(taskId: string): Promise<ITask | null> {
+    const task = await taskModel.findById(taskId).select("user");
+    return task;
+  }
+
+  async create(data: IAddTask, userId: string): Promise<ITask> {
     const taskData = {
       ...data,
       user: userId,
@@ -66,18 +59,12 @@ class TaskRepository {
   }
 
   async update(taskId: string, data: IUpdateTask): Promise<ITask | null> {
-    const task = await taskModel
-      .findByIdAndUpdate(taskId, data, { new: true })
-      .populate("user", "username email")
-      .exec();
+    const task = await taskModel.findByIdAndUpdate(taskId, data, { new: true });
     return task;
   }
 
   async delete(taskId: string): Promise<ITask | null> {
-    const task = await taskModel
-      .findByIdAndDelete(taskId)
-      .populate("user", "username")
-      .exec();
+    const task = await taskModel.findByIdAndDelete(taskId);
     return task;
   }
 }

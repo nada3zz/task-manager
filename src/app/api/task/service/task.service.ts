@@ -7,6 +7,7 @@ import {
   ITask,
   IUpdateTask,
   IFindAllTasks,
+  IAddTask,
 } from "../interface";
 
 class TaskService {
@@ -28,12 +29,13 @@ class TaskService {
     };
   }
 
-  async getTask(id: string, userId: string): Promise<{ data: ITask }> { 
-    const task = await this._findTask(id, userId);
+  async getTask(id: string, userId: string): Promise<{ data: ITask | null }> { 
+    await this._findTask(id, userId)
+    const task = await taskRepo.findById(id);
     return { data: task };
   }
 
-  async addTask(data: ITask, userId: string): Promise<{ data: string }> {
+  async addTask(data: IAddTask, userId: string): Promise<{ data: string }> {
     await taskRepo.create(data, userId);
     return { data: "Task has been added successfully" };
   }
@@ -55,15 +57,13 @@ class TaskService {
   }
 
   private async _findTask(id: string, userId: string): Promise<ITask> {
-    const task = await taskRepo.findById(id);
+    const task = await taskRepo.findByUser(id);
     
     if (!task) {
       throw new BadRequestException("This task does not exist");
     }
-    
-    const taskUserId = typeof task.user === 'object' ? task.user._id.toString() : task.user.toString();
-    
-    if (taskUserId !== userId) {
+        
+    if (String(task.user) !== userId) {
       throw new ForbiddenException("You don't have access to this task");
     }
     

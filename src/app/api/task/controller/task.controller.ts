@@ -3,6 +3,13 @@ import taskService from "../service/task.service";
 import { AuthenticatedRequest } from "../../../middlewares/isAuthenticated.middleware";
 
 class TaskController {
+  async addTask(req: AuthenticatedRequest, res: Response) {
+    const data = req.body;
+    const userId = req.user?.id;
+    const result = await taskService.addTask(data, userId);
+    return result;
+  }
+
   async getAllTasks(req: AuthenticatedRequest, res: Response) {
     const { page, limit, search, sortOrder } = req.query;
     const userId = req.user?.id;
@@ -11,7 +18,7 @@ class TaskController {
         page: Number(page),
         limit: Number(limit),
         search: search as string,
-        sortOrder: (sortOrder as "asc" | "desc"),
+        sortOrder: sortOrder as "asc" | "desc",
       },
       userId
     );
@@ -25,16 +32,7 @@ class TaskController {
     return { data };
   }
 
-  async addTask(req: AuthenticatedRequest, res: Response) {
-    const data = req.body;
-    const userId = req.user?.id;
-    const result = await taskService.addTask(data, userId);
-    return result ;
-  }
-  async updateTask(
-    req: AuthenticatedRequest,
-    res: Response
-  ) {
+  async updateTask(req: AuthenticatedRequest, res: Response) {
     const { id } = req.params;
     const data = req.body;
     const userId = req.user?.id;
