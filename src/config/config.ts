@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 dotenv.config();
 export const PORT = process.env.APP_PORT
   ? Number(process.env.APP_PORT)
-  : 8080;
+  : 3000;
 export const DEVELOPMENT = process.env.NODE_ENV === "development";
 export const TEST = process.env.NODE_ENV === "test";
 export const PRODUCTION = process.env.NODE_ENV === "production";
